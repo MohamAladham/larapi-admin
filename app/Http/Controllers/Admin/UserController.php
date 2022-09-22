@@ -9,8 +9,6 @@ use App\Http\Resources\UserItemResource;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\UserService;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserController extends Controller
@@ -24,7 +22,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $items = User::query()->search()->paginate( 1 )->withQueryString();
+        $items = User::query()->search()->latest()->paginate()->withQueryString();
 
         return UserResource::collection( $items );
 //            ->additional( [ 'meta' => $data ] );

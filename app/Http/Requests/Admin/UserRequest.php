@@ -3,6 +3,9 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class UserRequest extends FormRequest
 {
@@ -13,7 +16,7 @@ class UserRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return TRUE;
     }
 
     /**
@@ -23,8 +26,21 @@ class UserRequest extends FormRequest
      */
     public function rules()
     {
-        return [
-            //
+        $id = request()->route()->parameter( 'user' );
+
+        $rules = [
+            'name'          => [ 'required', 'string', 'max:100' ],
+            'email'         => [ 'required', 'email', 'max:100', Rule::unique( 'users' )->ignore( $id ) ],
+            'avatar'        => [ 'nullable', 'image' ],
+            'avatarPreview' => [ 'string', 'nullable' ],
+            'password'      => [ 'required', 'confirmed', Password::min( 8 ) ],
         ];
+
+        if ( $id )
+        {
+            $rules['password'] = [ 'nullable', 'confirmed', Password::min( 8 ) ];
+        }
+
+        return $rules;
     }
 }
