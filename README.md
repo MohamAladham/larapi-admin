@@ -11,7 +11,6 @@
 - copy `.env.example ` to `.env ` and set necessary configs
 - run `php artisan key:generate` to generate new application key
 - run `php artisan migrate --seed` to run database migrations
-- run `npm install`
 - for test proposal run `php artisan serve`
 
 **Notes:**
